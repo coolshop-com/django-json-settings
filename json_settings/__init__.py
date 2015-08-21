@@ -18,12 +18,11 @@ def json_patch(path):
         globals()[k] = v
 
 
-def patch_settings():
+def patch_settings(json_settings_file):
     env_settings = os.environ.get('JSON_SETTINGS', None)
     if env_settings is None:
         # We only use the default if it exists
-        settings_file = globals().get('JSON_SETTINGS_FILE', 'settings.json')
-        env_settings = os.path.join(sys.prefix, "etc", settings_file)
+        env_settings = os.path.join(sys.prefix, "etc", json_settings_file)
         if not os.path.exists(env_settings):
             return
     json_patch(env_settings)
@@ -35,6 +34,3 @@ def patch_settings():
     if "MEDIA_ROOT" not in globals():
         globals()["MEDIA_ROOT"] = os.path.join(
             globals()["VAR_DIRECTORY"], "media")
-
-
-patch_settings()
